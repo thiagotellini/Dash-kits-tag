@@ -5,8 +5,7 @@ import locale
 
 st.set_page_config(layout="wide")
 
-# Definir o locale para Português do Brasil
-locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+
 
 # Carregar os dados
 df = pd.read_csv("Report.csv", decimal=",", encoding="latin-1", delimiter=";")

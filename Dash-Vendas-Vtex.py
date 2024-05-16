@@ -39,10 +39,10 @@ df["Phone"] = df["Phone"].astype(str).str.replace(",", "")
 df["Phone"] = df["Phone"].str.replace("^55", "", regex=True)
 
 # Carregar o logotipo
-# logo_image = ""
+logo_image = "img/logo.png"
 
 # Exibir o logotipo na barra de filtro com largura ajustada
-# st.sidebar.image(logo_image, width=100)
+st.sidebar.image(logo_image, width=200)
 
 # criação de sidebar lateral com caixa de seleção por dia
 df["Month"] = df["Creation Date"].apply(lambda x: str(x.month) + "/" + str(x.year))

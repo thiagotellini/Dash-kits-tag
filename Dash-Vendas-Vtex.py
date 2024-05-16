@@ -63,10 +63,11 @@ if selected_status:
     df_filtered = df_filtered[df_filtered["Status"].isin(selected_status)]
 
 # Adicionar um seletor na barra lateral para o usuário escolher o assinante
-selected_subscriber = st.sidebar.selectbox("Filtrar por Assinante", df_filtered["Assinante"].unique())
+selected_subscriber = st.sidebar.selectbox("Filtrar por Assinante", ["Todos"] + df_filtered["Assinante"].unique().tolist())
 
 # filtro por assinante com base na coluna Assinante
-df_filtered = df_filtered[df_filtered["Assinante"] == selected_subscriber]
+if selected_subscriber != "Todos":
+    df_filtered = df_filtered[df_filtered["Assinante"] == selected_subscriber]
 
 # Remover status de pedido que não têm pedidos no mês selecionado
 status_opcoes = df_filtered["Status"].unique()
@@ -355,7 +356,7 @@ with col10:
     st.write(df_selected)
 
 # Carregar os dados novamente apenas com as colunas necessárias
-df_sku = pd.read_csv("Report.csv", usecols=["Order", "Quantity_SKU",  "SKU Name"], decimal=",", encoding="latin-1", delimiter=";")
+df_sku = pd.read_csv("Report.csv", usecols=["Order", "Quantity_SKU",  "SKU Name", "Payment Value", "Total Value", "Discounts Totals", "Shipping Value"], decimal=",", encoding="latin-1", delimiter=";")
 
 # Filtrar as linhas correspondentes ao pedido selecionado
 df_sku_order = df_sku[df_sku["Order"] == selected_order]
@@ -370,7 +371,10 @@ with col11:
         """,
         unsafe_allow_html=True
     )
+    total_payment_value = df_sku_order["Payment Value"].unique().sum()
+    
     
     # Exibir os produtos comprados
     df_sku_order = df_sku_order.rename(columns={"Quantity_SKU": "Quantidade", "SKU Name": "Nome SKU"})
     st.table(df_sku_order[["Quantidade", "Nome SKU"]].reset_index(drop=True).style.set_table_styles([dict(selector="table", props=[("width", "100%")])]))
+    st.write(f"Total R$ {total_payment_value}")
